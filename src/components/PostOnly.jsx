@@ -9,6 +9,10 @@ export default function PostOnly() {
     null,
   );
 
+  if (data && data.error && data.error.name === 'JsonWebTokenError') {
+    return <Navigate to="/" replace={true} />;
+  }
+
   if (data && data.error === 'could not find resource') {
     return <Navigate to={'/error'} />;
   }

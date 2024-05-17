@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 import { fetchInitialData } from '../utils/fetchUtils';
+import { Navigate } from 'react-router-dom';
 
 import CommentAny from './CommentAny';
 import CommentEdit from './CommentEdit';
@@ -18,9 +19,14 @@ export default function Comments({ token, onRemount }) {
   // get user data from outlet context
   const { user } = useOutletContext();
 
+  // if user is unauthorized
+  if (data && data.error && data.error.name === 'JsonWebTokenError') {
+    return <p>failed authentication</p>;
+  }
+
   // if url is malformed
   if (data && data.error === 'could not find resource') {
-    return <Navigate to={'/error'} />;
+    return <p>invalid url</p>;
   }
 
   // interactive state

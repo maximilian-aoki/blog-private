@@ -9,7 +9,6 @@ localUser = localUser ? JSON.parse(localUser) : null;
 export default function Root() {
   const [token, setToken] = useState(localToken);
   const [user, setUser] = useState(localUser);
-  console.log(user);
 
   const navigate = useNavigate();
 
@@ -19,7 +18,7 @@ export default function Root() {
     setToken(token);
     setUser(user);
 
-    navigate('/', { replace: true });
+    navigate('/posts', { replace: true });
   }
 
   function handleLogout() {
@@ -28,7 +27,7 @@ export default function Root() {
     setToken(null);
     setUser(null);
 
-    navigate('/log-in', { replace: true });
+    navigate('/', { replace: true });
   }
 
   return (
@@ -42,23 +41,17 @@ export default function Root() {
         )}
         <nav className="">
           <ul className="flex gap-6">
-            <li>
-              <Link to="/" className="hover:font-bold">
-                Home
-              </Link>
-            </li>
-            {token ? (
-              <li>
-                <button onClick={handleLogout} className="hover:font-bold">
-                  Log Out
-                </button>
-              </li>
-            ) : (
+            {token && (
               <>
                 <li>
-                  <Link to="/log-in" className="hover:font-bold">
-                    Log In
+                  <Link to="/posts" className="hover:font-bold">
+                    Posts
                   </Link>
+                </li>
+                <li>
+                  <button onClick={handleLogout} className="hover:font-bold">
+                    Log Out
+                  </button>
                 </li>
               </>
             )}

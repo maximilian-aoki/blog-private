@@ -14,11 +14,11 @@ export default function Router() {
       children: [
         {
           path: '/',
-          element: <AllPosts />,
+          element: <Login />,
         },
         {
-          path: 'log-in',
-          element: <Login />,
+          path: '/posts',
+          element: <AllPosts />,
         },
         {
           path: 'posts/:postId',

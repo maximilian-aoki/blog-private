@@ -1,8 +1,12 @@
 import { useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, Navigate } from 'react-router-dom';
 
 export default function Login() {
-  const { handleLoginSuccess } = useOutletContext();
+  const { handleLoginSuccess, token } = useOutletContext();
+
+  if (token) {
+    return <Navigate to="/posts" replace={true} />;
+  }
 
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
@@ -63,7 +67,7 @@ export default function Login() {
 
   return (
     <div className="flex-initial w-96 flex flex-col gap-2">
-      <h2 className="text-xl text-white font-bold">Login Page</h2>
+      <h2 className="text-xl text-white font-bold">Admin Login Page</h2>
       <form
         onSubmit={handleLoginSubmit}
         className="rounded bg-dutch shadow p-4 flex flex-col gap-4"

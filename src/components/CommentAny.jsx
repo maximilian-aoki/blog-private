@@ -11,8 +11,8 @@ export default function CommentAny({ comment, user, onDelete, onEdit }) {
         {comment.author.fullName} -{' '}
         {DateTime.fromISO(comment.createdAt).toLocaleString(DateTime.DATE_MED)}
       </p>
-      {user && comment.author._id === user._id && (
-        <div className="flex gap-2 justify-end">
+      <div className="flex gap-2 justify-end">
+        {user && comment.author._id === user._id && (
           <button
             className="rounded px-2 text-white bg-true"
             data-id={comment._id}
@@ -20,15 +20,15 @@ export default function CommentAny({ comment, user, onDelete, onEdit }) {
           >
             Edit
           </button>
-          <button
-            className="rounded px-2 text-white bg-flame"
-            data-id={comment._id}
-            onClick={onDelete}
-          >
-            Delete
-          </button>
-        </div>
-      )}
+        )}
+        <button
+          className="rounded px-2 text-white bg-flame"
+          data-id={comment._id}
+          onClick={onDelete}
+        >
+          Delete
+        </button>
+      </div>
     </li>
   );
 }

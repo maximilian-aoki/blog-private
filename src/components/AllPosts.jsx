@@ -5,7 +5,7 @@ export default function AllPosts() {
   const { data, error, loading } = fetchInitialData('/posts', 'GET', null);
 
   if (data && data.error && data.error.name === 'JsonWebTokenError') {
-    return <Navigate to="/log-in" replace={true} />;
+    return <Navigate to="/" replace={true} />;
   }
 
   return (
