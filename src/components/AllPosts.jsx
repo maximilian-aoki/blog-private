@@ -5,7 +5,12 @@ import { DateTime } from 'luxon';
 export default function AllPosts() {
   const { data, error, loading } = fetchInitialData('/posts', 'GET', null);
 
-  if (data && data.error && data.error.name === 'JsonWebTokenError') {
+  if (
+    data &&
+    data.error &&
+    (data.error.name === 'JsonWebTokenError' ||
+      data.error.message === 'jwt expired')
+  ) {
     return <Navigate to="/" replace={true} />;
   }
 

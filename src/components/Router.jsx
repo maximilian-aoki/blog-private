@@ -4,6 +4,7 @@ import Root from './Root';
 import Login from './Login';
 import AllPosts from './AllPosts';
 import PostCreate from './PostCreate';
+import PostEdit from './PostEdit';
 import Post from './Post';
 import Error from './Error';
 
@@ -28,6 +29,10 @@ export default function Router() {
         {
           path: 'posts/:postId',
           element: <Post />,
+        },
+        {
+          path: 'posts/:postId/update',
+          element: <PostEdit />,
         },
       ],
     },
