@@ -1,5 +1,6 @@
 import { fetchInitialData } from '../utils/fetchUtils';
 import { Link, Navigate } from 'react-router-dom';
+import { DateTime } from 'luxon';
 
 export default function AllPosts() {
   const { data, error, loading } = fetchInitialData('/posts', 'GET', null);
@@ -15,6 +16,11 @@ export default function AllPosts() {
       {error && <p>network error - try again </p>}
       {data && (
         <ul className="flex flex-col gap-4">
+          <li className="bg-true p-4 text-white font-bold rounded shadow">
+            <Link to="/posts/create" className="hover:cursor-pointer">
+              <p className="text-center">Create New Post</p>
+            </Link>
+          </li>
           {data.allPosts.map((post) => {
             return (
               <li
@@ -23,7 +29,12 @@ export default function AllPosts() {
               >
                 <Link to={`/posts/${post._id}`}>
                   <p className="font-bold">{post.title}</p>
-                  <hr className="border-olive mb-1" />
+                  <p className="text-sm italic">
+                    {DateTime.fromISO(post.createdAt).toLocaleString(
+                      DateTime.DATE_MED,
+                    )}
+                  </p>
+                  <hr className="border-olive mb-1 mt-1" />
                   <p>{post.overview}</p>
                   {post.isPublished === true ? (
                     <p className="text-end text-true italic text-sm">

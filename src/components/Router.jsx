@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from './Root';
 import Login from './Login';
 import AllPosts from './AllPosts';
+import PostCreate from './PostCreate';
 import Post from './Post';
 import Error from './Error';
 
@@ -19,6 +20,10 @@ export default function Router() {
         {
           path: '/posts',
           element: <AllPosts />,
+        },
+        {
+          path: '/posts/create',
+          element: <PostCreate />,
         },
         {
           path: 'posts/:postId',
