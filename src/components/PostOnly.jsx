@@ -25,7 +25,16 @@ export default function PostOnly() {
         <>
           <h2 className="text-xl text-white font-bold">{data.post.title}</h2>
           <p className="text-sm text-white italic">
-            {data.post.author.fullName}
+            {data.post.author.fullName} -{' '}
+            {data.post.isPublished ? (
+              <span className="text-true rounded bg-gray-300 px-1">
+                published
+              </span>
+            ) : (
+              <span className="text-flame rounded bg-gray-300 px-1">
+                unpublished
+              </span>
+            )}
           </p>
           <div className="p-2 my-4 text-olive bg-dutch rounded shadow">
             <p>{data.post.text}</p>

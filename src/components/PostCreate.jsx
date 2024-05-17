@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useNavigation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function PostCreate() {
-  const navigate = useNavigation();
+  const navigate = useNavigate();
 
   // inputs
   const [titleInput, setTitleInput] = useState('');
@@ -57,7 +57,6 @@ export default function PostCreate() {
         );
 
         const data = await response.json();
-        console.log(data);
 
         if (data.error) {
           setFormLoading(false);
@@ -67,7 +66,7 @@ export default function PostCreate() {
 
         setFormLoading(false);
         setPostError('');
-        // navigate
+        navigate(`/posts/${data.newPost._id}`);
       } catch (err) {
         setFormLoading(false);
         setPostError('something went wrong');
