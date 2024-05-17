@@ -1,12 +1,13 @@
-# Blog Site - Public Front End
+# Blog Site - PRIVATE Front End
 
-A public site for users to authenticate, view posts, and create/edit their own comments.
-Interfaces with the public backend API.
+A PRIVATE site for admin user to authenticate, view/create/publish/edit/delete posts, create/edit their own comments, and delete any other comment.
+Interfaces with the PRIVATE backend API.
 Built with Vite + React + tailwindcss
 
 ## Features
 
 - integrates with the backend API through strict CORS policy
-- uses JWTs to store user credential on localStorage
-- view all published blog posts
+- uses JWTs to store admin user credential on localStorage
+- view/edit all blog posts
 - create/edit own comments
+- delete any comment
