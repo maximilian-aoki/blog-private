@@ -1,4 +1,4 @@
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, Link } from 'react-router-dom';
 import { fetchInitialData } from '../utils/fetchUtils';
 
 export default function PostOnly() {
@@ -36,8 +36,18 @@ export default function PostOnly() {
               </span>
             )}
           </p>
-          <div className="p-2 my-4 text-olive bg-dutch rounded shadow">
+          <div className="p-4 my-4 text-olive bg-dutch rounded shadow flex flex-col gap-4">
             <p>{data.post.text}</p>
+            <div className="flex gap-2">
+              <Link className="flex-1 rounded p-2 bg-true shadow">
+                <p className="text-center font-bold text-lg text-white">Edit</p>
+              </Link>
+              <button className="flex-1 rounded p-2 bg-flame shadow">
+                <p className="text-center font-bold text-lg text-white">
+                  Delete
+                </p>
+              </button>
+            </div>
           </div>
         </>
       )}
