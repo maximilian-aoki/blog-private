@@ -5,6 +5,7 @@ import { DateTime } from 'luxon';
 export default function AllPosts() {
   const { data, error, loading } = fetchInitialData('/posts', 'GET', null);
 
+  // jwt expired
   const { handleLogout } = useOutletContext();
   if (data && data.error && data.error.name === 'TokenExpiredError') {
     // this is such bad practice - need to find a better way to logout after expired jwt

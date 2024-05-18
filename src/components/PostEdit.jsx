@@ -1,8 +1,15 @@
-import { useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import {
+  useParams,
+  useOutletContext,
+  Navigate,
+  useNavigate,
+} from 'react-router-dom';
 import { fetchInitialData } from '../utils/fetchUtils';
 
 export default function PostEdit() {
+  const navigate = useNavigate();
+
   // get initial load data based on url
   const { postId } = useParams();
   const { data, error, loading } = fetchInitialData(
@@ -11,15 +18,36 @@ export default function PostEdit() {
     null,
   );
 
-  if (data && data.error && data.error.message === 'jwt expired') {
+  // jwt expired
+  const { handleLogout } = useOutletContext();
+  if (data && data.error && data.error.name === 'TokenExpiredError') {
+    // this is such bad practice - need to find a better way to logout after expired jwt
+    return handleLogout();
+  }
+
+  if (data && data.error && data.error.name === 'JsonWebTokenError') {
     return <Navigate to="/" replace={true} />;
   }
 
-  // inputs
+  if (data && data.error === 'could not find resource') {
+    return <Navigate to={'/error'} />;
+  }
+
+  // inputs and effect
   const [titleInput, setTitleInput] = useState('');
   const [overviewInput, setOverviewInput] = useState('');
   const [textInput, setTextInput] = useState('');
   const [isPublishedInput, setIsPublishedInput] = useState(false);
+
+  useEffect(() => {
+    if (data && data.post) {
+      console.log('');
+      setTitleInput(data.post.title);
+      setOverviewInput(data.post.overview);
+      setTextInput(data.post.text);
+      setIsPublishedInput(data.post.isPublished);
+    }
+  }, [data]);
 
   // loading and error state
   const [formLoading, setFormLoading] = useState(false);
@@ -70,6 +98,12 @@ export default function PostEdit() {
         const data = await response.json();
         console.log(data);
 
+        // jwt expired
+        if (data && data.error && data.error.name === 'TokenExpiredError') {
+          // this is such bad practice - need to find a better way to logout after expired jwt
+          return handleLogout();
+        }
+
         if (data.error) {
           setFormLoading(false);
           setEditError(data.error);
@@ -90,73 +124,79 @@ export default function PostEdit() {
 
   return (
     <div className="flex-initial w-96 flex flex-col gap-2">
-      <h2 className="text-xl text-white font-bold">Create New Post</h2>
-      <form
-        onSubmit={handlePostSubmit}
-        className="rounded bg-dutch shadow p-4 flex flex-col gap-4"
-      >
-        <div className="flex flex-col gap-2">
-          <label htmlFor="title" className="italic text-olive">
-            Title:
-          </label>
-          <input
-            type="text"
-            id="title"
-            className="p-2 rounded shadow-inner"
-            value={titleInput}
-            onChange={handleTitleChange}
-            required
-          />
+      <h2 className="text-xl text-white font-bold">Edit Post</h2>
+      {loading && <p>loading post to edit...</p>}
+      {error && <p>network error - try again </p>}
+      {data && (
+        <div>
+          <form
+            onSubmit={handlePostSubmit}
+            className="rounded bg-dutch shadow p-4 flex flex-col gap-4"
+          >
+            <div className="flex flex-col gap-2">
+              <label htmlFor="title" className="italic text-olive">
+                Title:
+              </label>
+              <input
+                type="text"
+                id="title"
+                className="p-2 rounded shadow-inner"
+                value={titleInput}
+                onChange={handleTitleChange}
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="overview" className="italic text-olive">
+                Overview:
+              </label>
+              <textarea
+                id="overview"
+                className="p-2 rounded shadow-inner h-20"
+                value={overviewInput}
+                onChange={handleOverviewChange}
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="text" className="italic text-olive">
+                Text:
+              </label>
+              <textarea
+                id="text"
+                className="p-2 rounded shadow-inner h-40"
+                value={textInput}
+                onChange={handleTextChange}
+                required
+              />
+            </div>
+            <div className="flex gap-2">
+              <label htmlFor="isPublished" className="italic text-olive">
+                Published:
+              </label>
+              <input
+                type="checkbox"
+                id="isPublished"
+                checked={isPublishedInput}
+                onChange={handleIsPublishedChange}
+                className="hover:cursor-pointer w-8 border-olive"
+              />
+            </div>
+            <input
+              type="submit"
+              value="Edit Post"
+              className="rounded p-4 font-bold bg-true text-white hover:cursor-pointer mt-2"
+            />
+          </form>
+          {formLoading && (
+            <p className="text-dutch font-bold italic">
+              checking action with server..
+            </p>
+          )}
+          {editError !== '' && (
+            <p className="text-flame font-bold italic">{editError}</p>
+          )}
         </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="overview" className="italic text-olive">
-            Overview:
-          </label>
-          <textarea
-            id="overview"
-            className="p-2 rounded shadow-inner h-20"
-            value={overviewInput}
-            onChange={handleOverviewChange}
-            required
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="text" className="italic text-olive">
-            Text:
-          </label>
-          <textarea
-            id="text"
-            className="p-2 rounded shadow-inner h-40"
-            value={textInput}
-            onChange={handleTextChange}
-            required
-          />
-        </div>
-        <div className="flex gap-2">
-          <label htmlFor="isPublished" className="italic text-olive">
-            Published:
-          </label>
-          <input
-            type="checkbox"
-            id="isPublished"
-            checked={isPublishedInput}
-            onChange={handleIsPublishedChange}
-            className="hover:cursor-pointer w-8 border-olive"
-          />
-        </div>
-        <input
-          type="submit"
-          value="Create Post"
-          className="rounded p-4 font-bold bg-true text-white hover:cursor-pointer mt-2"
-        />
-      </form>
-      {formLoading && (
-        <p className="text-dutch font-bold italic">
-          checking action with server..
-        </p>
-      )}
-      {editError !== '' && (
-        <p className="text-flame font-bold italic">{editError}</p>
       )}
     </div>
   );

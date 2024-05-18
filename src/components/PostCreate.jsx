@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 
 export default function PostCreate() {
   const navigate = useNavigate();
+  const { handleLogout } = useOutletContext();
 
   // inputs
   const [titleInput, setTitleInput] = useState('');
@@ -57,6 +58,12 @@ export default function PostCreate() {
         );
 
         const data = await response.json();
+
+        // if jwt expired
+        if (data && data.error && data.error.name === 'TokenExpiredError') {
+          // this is such bad practice - need to find a better way to logout after expired jwt
+          return handleLogout();
+        }
 
         if (data.error) {
           setFormLoading(false);

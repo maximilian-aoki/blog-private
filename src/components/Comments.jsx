@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 import { fetchInitialData } from '../utils/fetchUtils';
-import { Navigate } from 'react-router-dom';
 
 import CommentAny from './CommentAny';
 import CommentEdit from './CommentEdit';
@@ -17,7 +16,13 @@ export default function Comments({ token, onRemount }) {
   );
 
   // get user data from outlet context
-  const { user } = useOutletContext();
+  const { user, handleLogout } = useOutletContext();
+
+  // if jwt expired
+  if (data && data.error && data.error.name === 'TokenExpiredError') {
+    // this is such bad practice - need to find a better way to logout after expired jwt
+    return <p>expired authentication session</p>;
+  }
 
   // if user is unauthorized
   if (data && data.error && data.error.name === 'JsonWebTokenError') {
@@ -64,6 +69,12 @@ export default function Comments({ token, onRemount }) {
         );
 
         const data = await response.json();
+
+        // if jwt expired
+        if (data && data.error && data.error.name === 'TokenExpiredError') {
+          // this is such bad practice - need to find a better way to logout after expired jwt
+          return handleLogout();
+        }
 
         if (data.error) {
           if (
@@ -118,6 +129,12 @@ export default function Comments({ token, onRemount }) {
 
         const data = await response.json();
 
+        // if jwt expired
+        if (data && data.error && data.error.name === 'TokenExpiredError') {
+          // this is such bad practice - need to find a better way to logout after expired jwt
+          return handleLogout();
+        }
+
         if (data.error) {
           if (
             data.error.name === 'JsonWebTokenError' ||
@@ -162,6 +179,12 @@ export default function Comments({ token, onRemount }) {
         );
 
         const data = await response.json();
+
+        // if jwt expired
+        if (data && data.error && data.error.name === 'TokenExpiredError') {
+          // this is such bad practice - need to find a better way to logout after expired jwt
+          return handleLogout();
+        }
 
         if (data.error) {
           setFormLoading(false);
