@@ -33,7 +33,7 @@ export default function Root() {
   return (
     <div className="bg-battleship h-screen flex flex-col">
       <header className="bg-olive flex-none h-auto p-6 flex flex-col gap-4 text-white items-center">
-        <h1 className="text-4xl font-bold">MAXY BLOG</h1>
+        <h1 className="text-4xl font-bold">BLOG ADMIN</h1>
         {user && (
           <p className="text-sm italic text-gray-400">
             Welcome back, {user.name}
