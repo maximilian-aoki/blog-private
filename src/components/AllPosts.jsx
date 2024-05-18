@@ -1,16 +1,17 @@
 import { fetchInitialData } from '../utils/fetchUtils';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useOutletContext } from 'react-router-dom';
 import { DateTime } from 'luxon';
 
 export default function AllPosts() {
   const { data, error, loading } = fetchInitialData('/posts', 'GET', null);
 
-  if (
-    data &&
-    data.error &&
-    (data.error.name === 'JsonWebTokenError' ||
-      data.error.message === 'jwt expired')
-  ) {
+  const { handleLogout } = useOutletContext();
+  if (data && data.error && data.error.name === 'TokenExpiredError') {
+    // this is such bad practice - need to find a better way to logout after expired jwt
+    return handleLogout();
+  }
+
+  if (data && data.error && data.error.name === 'JsonWebTokenError') {
     return <Navigate to="/" replace={true} />;
   }
 

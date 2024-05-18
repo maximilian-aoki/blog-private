@@ -26,6 +26,7 @@ export function fetchInitialData(url, method, body) {
         );
 
         const data = await response.json();
+        console.log(data);
         if (!ignore) {
           setData(data);
           setError(null);

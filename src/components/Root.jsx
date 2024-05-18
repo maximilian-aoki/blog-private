@@ -59,7 +59,7 @@ export default function Root() {
         </nav>
       </header>
       <main className="flex-1 p-6 bg-battleship flex justify-center">
-        <Outlet context={{ token, handleLoginSuccess, user }} />
+        <Outlet context={{ token, user, handleLoginSuccess, handleLogout }} />
       </main>
       <footer className="bg-true flex-none p-6 grid place-content-center">
         <p className="text-white font-bold">2024 Copyright Maximilian Aoki</p>
