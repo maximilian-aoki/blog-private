@@ -96,7 +96,6 @@ export default function PostEdit() {
         );
 
         const data = await response.json();
-        console.log(data);
 
         // jwt expired
         if (data && data.error && data.error.name === 'TokenExpiredError') {
